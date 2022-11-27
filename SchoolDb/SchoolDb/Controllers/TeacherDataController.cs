@@ -37,7 +37,12 @@ namespace SchoolDb.Controllers
             MySqlCommand cmd = Conn.CreateCommand();
 
             //SQL QUERY
-            cmd.CommandText = "Select * from Teachers where lower(teacherfname) like '%"+Searchkey+"%' or lower(teacherlname) like '%"+Searchkey+"%';
+            cmd.CommandText = "Select * from Teachers where lower(teacherfname) like lower(@key) or lower(teacherlname) like lower(@key) or lower
+            (concat(teacherfname,' ', teacherlname)) like lower(@key)";
+            
+            cmd.Parameters.AddWithValue("@key", "%" + SearchKey + "%");
+            cmd.Prepare();
+            
 
             //Gather Result Set of Query into a variable
             MySqlDataReader ResultSet = cmd.ExecuteReader();
