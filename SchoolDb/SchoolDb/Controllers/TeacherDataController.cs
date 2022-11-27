@@ -24,8 +24,8 @@ namespace SchoolDb.Controllers
         /// A list of Teachers (first names and last names)
         /// </returns>
         [HttpGet]
-
-        public IEnumerable<Teacher> ListTeachers()
+        [Route("api/TeacherData/ListTeachers/{SearchKey?}")]
+        public IEnumerable<Teacher> ListTeachers(string SearchKey=null)
         {
             //Create an instance of a connection
             MySqlConnection Conn = School.AccessDatabase();
@@ -37,7 +37,7 @@ namespace SchoolDb.Controllers
             MySqlCommand cmd = Conn.CreateCommand();
 
             //SQL QUERY
-            cmd.CommandText = "Select * from Teachers";
+            cmd.CommandText = "Select * from Teachers where lower(teacherfname) like '%"+Searchkey+"%' or lower(teacherlname) like '%"+Searchkey+"%';
 
             //Gather Result Set of Query into a variable
             MySqlDataReader ResultSet = cmd.ExecuteReader();
